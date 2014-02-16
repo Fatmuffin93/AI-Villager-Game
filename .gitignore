@@ -6,3 +6,17 @@
 *.csproj
 *.unityproj
 *.sln
+
+###################
+# Unity3d Specific
+###################
+
+*/Library
+*/Temp
+*.exe
+*.vcproject
+*.sln
+*.csproj
+*.pidb
+*.unityproj
+*.userprefs
