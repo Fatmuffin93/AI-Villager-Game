@@ -51,10 +51,36 @@ public class Villager : MonoBehaviour
 	//list of nearby flockers
 	private List<GameObject> nearVillagers = new List<GameObject> ();
 	private List<float> nearVillagersDistances = new List<float> ();
-	
+
+	// List of gameobjects with same tag
+	GameObject[] waypoints; 
+	// initial default values for the target waypoint
+	float targetDistance = 10.0f;
+	Vector3 targetVector = new Vector3(0.0f,0.0f,0.0f);
+	int current = 0;
+	Vector3 closestVector;
+
 	//Creation of Villager
 	public void Start ()
 	{
+		// gets array of all waypoints on map
+		waypoints = GameObject.FindGameObjectsWithTag("WayPoint");
+
+		// runs through array of all waypoints to determine furthest one away
+		for(int k = 0; k < waypoints.Length; k++)
+		{
+			// stores distance to each waypoint
+			float temp = Vector3.Distance(this.transform.position,waypoints[k].transform.position);
+			
+			// determines the furthest waypoint
+			if(temp > targetDistance)
+			{
+				targetDistance = temp;
+				targetVector = waypoints[k].transform.position;
+			}
+		}
+		closestVector = waypoints[current].transform.position;
+
 		//get component references
 		characterController = gameObject.GetComponent<CharacterController> ();
 		steering = gameObject.GetComponent<Steering> ();
@@ -69,19 +95,19 @@ public class Villager : MonoBehaviour
 	{
 		if(wCollision.gameObject.tag == "Cart")
 		{
-			GameObject savedVillager = this.gameObject;
-			Villager safe = this; 
-			gameManager.Villagers.Remove(savedVillager);
-			gameManager.vFollowers.Remove(follower.gameObject);
-			gameManager.Followers.Remove(safe);
-			Destroy(follower.gameObject);
-			Destroy(follower);
-			Destroy(savedVillager);
-			Destroy(this);
-			gameManager.createNewVillager();
-			gameManager.Saved.SavedVillagers = gameManager.Saved.SavedVillagers + 1;
+			//GameObject savedVillager = this.gameObject;
+			//Villager safe = this; 
+			//gameManager.Villagers.Remove(savedVillager);
+			//gameManager.vFollowers.Remove(follower.gameObject);
+			//gameManager.Followers.Remove(safe);
+			//Destroy(follower.gameObject);
+			//Destroy(follower);
+			//Destroy(savedVillager);
+			//Destroy(this);
+			//gameManager.createNewVillager();
+			//gameManager.Saved.SavedVillagers = gameManager.Saved.SavedVillagers + 1;
 			
-			Destroy(savedVillager);	
+			//Destroy(savedVillager);	
 			
 			
 		}
@@ -144,6 +170,7 @@ public class Villager : MonoBehaviour
 						+ gameManager.Werewolves[i].transform.forward);
 				}
 			}
+			/*
 			else if(Vector3.Distance(this.transform.position, gameManager.Mayor.transform.position) < 40 && leaderFollowBool == false)
 			{
 				gameManager.Followers.Add(this);
@@ -157,9 +184,20 @@ public class Villager : MonoBehaviour
 				steeringForce += gameManager.separationWt * Separation();
 				steeringForce += gameManager.cohesionWt * Cohesion();
 			}
+			*/
 			else
 			{	
-				steeringForce += 2 * wander();
+				if(Vector3.Distance(this.transform.position, closestVector) < 3)
+				{
+					if(closestVector == targetVector)
+					{
+					}
+					else
+					{
+						closestVector = waypoints[current++].transform.position;
+					}
+				}
+				steeringForce += 2 * steering.Arrival(closestVector);
 			}
 		}
 		

@@ -8,7 +8,7 @@ public class Steering : MonoBehaviour
 {
 	
 	//movement variables - exposed in inspector panel
-	public float maxSpeed = 50.0f;
+	public float maxSpeed = 10.0f;
 	//maximum speed of vehicle
 	public float maxForce = 15.0f;
 	// maximimum force allowed
@@ -83,7 +83,7 @@ public class Steering : MonoBehaviour
 		} 
 		else
 		{
-				dv = dv.normalized * (maxSpeed * .2f);
+			dv = dv.normalized * (maxSpeed * .2f);
 		}
 		
 		dv -= transform.forward * speed;//subtract velocity to get vector in that direction

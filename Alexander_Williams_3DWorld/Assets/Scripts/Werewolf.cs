@@ -69,6 +69,7 @@ public class Werewolf : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		/*
 		CalcSteeringForce ();
 		ClampSteering ();
 		
@@ -93,6 +94,7 @@ public class Werewolf : MonoBehaviour {
 		
 		// the CharacterController moves us subject to physical constraints
 		characterController.Move (moveDirection * Time.deltaTime);
+		*/
 	}
 	
 	private void findTarget()
