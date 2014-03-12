@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 	public Object werewolfPrefab;
 	public Object obstaclePrefab;
 	public Object followerPrefab;
+	public Object waypointPrefab; 
 
 	//values used by all villagers that are calculated by controller on update
 	private Vector3 flockDirection;
@@ -75,6 +76,9 @@ public class GameManager : MonoBehaviour
 	//list of werewilf followers
 	public List<GameObject> WerewolfFollowers = new List<GameObject>();
 	public List<GameObject> wFollowers {get{return WerewolfFollowers;}}
+
+	public List<GameObject> Waypoints = new List<GameObject>();
+	public List<GameObject> wPoints {get{return Waypoints;}}
 	
 
 	// array of obstacles with accessor
@@ -104,6 +108,14 @@ public class GameManager : MonoBehaviour
 		
 		mayor = GameObject.FindGameObjectWithTag ("Mayor");
 		
+		for(int i = 0; i < 12; i++)
+		{
+			for(int k = 0; k < 12; k++)
+			{
+				Waypoints.Add((GameObject)Instantiate(waypointPrefab, new Vector3(200+(50 * i),3 ,200 +(50 * k)), Quaternion.identity));
+			}
+		}
+
 		for (int i = 0; i < numberOfvillagers; i++) {
 			//Instantiate a flocker prefab, catch the reference, cast it to a GameObject
 			//and add it to our list all in one line.

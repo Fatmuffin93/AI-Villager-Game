@@ -185,19 +185,61 @@ public class Villager : MonoBehaviour
 				steeringForce += gameManager.cohesionWt * Cohesion();
 			}
 			*/
-			else
+			else // WORKING HERE
 			{	
-				if(Vector3.Distance(this.transform.position, closestVector) < 3)
+				int closestZtoMayor = (int)((gameManager.Mayor.transform.position.z - 200)/50);
+				int closestXtoMayor = (int)((gameManager.Mayor.transform.position.x - 200)/50);
+
+				if(closestXtoMayor < 0)
+					closestXtoMayor = 0;
+				if(closestZtoMayor < 0)
+					closestZtoMayor = 0;
+
+				int closestWaypointToMayor = (closestXtoMayor * 12) + closestZtoMayor;
+
+				//print(closestWaypointToMayor + " Mayor x: " + gameManager.Mayor.transform.position.x + " Mayor z:" + gameManager.Mayor.transform.position.z + " x-grid:" +closestXtoMayor + " z-grid:" + closestZtoMayor);
+
+				int closestZtoMe = (int)((transform.position.z - 200)/50);
+				int closestXtoMe = (int)((transform.position.x - 200)/50);
+				
+				if(closestXtoMe < 0)
+					closestXtoMe = 0;
+				if(closestZtoMe < 0)
+					closestZtoMe = 0;
+				
+				int closestWaypointToMe = (closestXtoMe * 12) + closestZtoMe;
+
+				int targetWaypoint = closestWaypointToMe;
+				/*if((int)(closestWaypointToMayor/12 - closestWaypointToMe/12) > 0)
+					targetWaypoint += 12;
+				else if((int)(closestWaypointToMayor/12 - closestWaypointToMe/12) < 0)
+					targetWaypoint -= 12;
+
+				if(closestWaypointToMayor%12 - closestWaypointToMe%12 > 0)
+					targetWaypoint += 1;
+				else if(closestWaypointToMayor%12 - closestWaypointToMe%12 < 0)
+					targetWaypoint -= 1;*/
+
+				if((int)(closestWaypointToMayor/12 - closestWaypointToMe/12) > 0)
+					targetWaypoint += 12;
+				else if((int)(closestWaypointToMayor/12 - closestWaypointToMe/12) < 0)
+					targetWaypoint -= 12;
+				
+				if(closestWaypointToMayor%12 - closestWaypointToMe%12 > 0)
+					targetWaypoint += 1;
+				else if(closestWaypointToMayor%12 - closestWaypointToMe%12 < 0)
+					targetWaypoint -= 1;
+
+
+				//print(closestWaypointToMayor + " " + transform.position.x + " " + transform.position.z);
+				if(Vector3.Distance(this.transform.position, gameManager.Mayor.transform.position) < 50)
 				{
-					if(closestVector == targetVector)
-					{
-					}
-					else
-					{
-						closestVector = waypoints[current++].transform.position;
-					}
+					steeringForce += 2 * steering.Arrival(gameManager.Mayor.transform.position);
 				}
-				steeringForce += 2 * steering.Arrival(closestVector);
+				else
+				{
+					steeringForce += 2 * steering.Arrival(gameManager.Waypoints[targetWaypoint].transform.position);
+				}
 			}
 		}
 		
